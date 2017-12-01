@@ -53,15 +53,18 @@ namespace Mag.Models
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Image>()
+                .Property(e => e.Picture)
+                .IsFixedLength();
+
+            modelBuilder.Entity<Image>()
                 .HasMany(e => e.Brand)
                 .WithOptional(e => e.Image)
                 .HasForeignKey(e => e.FK_Image);
 
             modelBuilder.Entity<Image>()
                 .HasMany(e => e.Product)
-                .WithRequired(e => e.Image)
-                .HasForeignKey(e => e.FK_Image)
-                .WillCascadeOnDelete(false);
+                .WithOptional(e => e.Image)
+                .HasForeignKey(e => e.FK_Image);
 
             modelBuilder.Entity<Image>()
                 .HasMany(e => e.User)

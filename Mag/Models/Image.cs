@@ -20,16 +20,15 @@ namespace Mag.Models
         [Key]
         public int PK_ImageId { get; set; }
 
-        [Column(TypeName = "image")]
-        [Required]
-        public String Picture { get; set; }
-
         [StringLength(128)]
         public string Description { get; set; }
 
         public int? FK_Product { get; set; }
 
         public int? FK_Review { get; set; }
+
+        [StringLength(1024)]
+        public string Picture { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Brand> Brand { get; set; }

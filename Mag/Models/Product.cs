@@ -32,9 +32,9 @@ namespace Mag.Models
 
         public int FK_Brand { get; set; }
 
-        public int FK_Image { get; set; }
-
         public decimal Price { get; set; }
+
+        public int? FK_Image { get; set; }
 
         public virtual Brand Brand { get; set; }
 

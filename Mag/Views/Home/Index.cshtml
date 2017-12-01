@@ -1,56 +1,201 @@
-﻿@model IEnumerable<Mag.Models.Brand>
+﻿@model IEnumerable<Mag.Models.Product>
 
 @{
-    ViewBag.Title = "Index";
+    Layout = null;
 }
 
-<h2>Index</h2>
+<!DOCTYPE html>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Image.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Contact)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Country)
-        </th>
-        <th></th>
-    </tr>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Каталог товаров</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/Style.css" rel="stylesheet" />
+    <link href="~/Content/Nav.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.2.1.min.js"></script>
+    <script src="~/Scripts/jquery.easydropdown.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/move-top.js"></script>
+    <script src="~/Scripts/easing.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $(".scroll").click(function (event) {
+                event.preventDefault();
+                $('html,body').animate({ scrollTop: $(this.hash).offset().top }, 900);
+            });
+        });
+    </script>
+</head>
+<body>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Contact)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Country)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.PK_BrandId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.PK_BrandId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.PK_BrandId })
-        </td>
-    </tr>
-}
+    <script src="~/Scripts/responsiveslides.min.js"></script>
+    <script>
 
-</table>
+        $(function () {
+            $("#slider").responsiveSlides({
+                auto: true,
+                nav: true,
+                speed: 500,
+                namespace: "callbacks",
+                pager: true,
+            });
+        });
+    </script>
+
+    <div class="banner-bg banner-bg1">
+        <div class="container">
+            <div class="header">
+                <div class="logo">
+                    <a href="index.html"><img style="width:30%;" src="~/Images/1.png" alt="" /></a>
+                </div>
+                <div class="top-nav">
+                    <label class="mobile_menu" for="mobile_menu">
+                        <span>Menu</span>
+                    </label>
+                    <input id="mobile_menu" type="checkbox">
+                    <ul class="nav">
+                        <li class="dropdown1">
+                            <a href="#">Каталог</a>
+                            <ul class="dropdown2">
+                                <li><a href="/catalog">Все товары</a></li>
+                                <?php foreach($data['category'] as $cat):?>
+                                <li><a href="/<?php echo $cat['name'];?>"><?php echo $cat['type'];?></a></li>
+                                <?php endforeach;?>
+                            </ul>
+                        </li>
+                        <li class="dropdown1"><a href="parts.html">Контакты</a></li>
+                        <li class="dropdown1"><a href="accessories.html">О нас</a></li>
+                        <li class="dropdown1"><a href="404.html">Как заказать</a></li>
+                        <a class="shop" href="/cart"><img src="~/Images/cart.png" alt="" /></a>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="caption">
+            <div class="slider">
+                <div class="callbacks_container">
+                    <ul class="rslides" id="slider">
+                        <li><h1>СПЛИТ-СИСТЕМЫ</h1></li>
+                        <li><h1>ИНВЕРТОРНЫЕ КОНДИЦИОНЕРЫ</h1></li>
+                        <li><h1>ОБОГРЕВАТЕЛИ</h1></li>
+                    </ul>
+                    <p style="color : #ffaa12;"><b>Ты <span>создаешь</span> свой <span>климат</span> сам</b></p>
+                    <a class="morebtn" href="/catalog"><b>Перейти в каталог</b></a>
+                </div>
+            </div>
+        </div>
+        <div class="dwn">
+            <a class="scroll" href="#cate"><img src="~/Images/scroll.png" alt="" /></a>
+        </div>
+    </div>
+    <!--/banner-->
+    <div id="cate" class="categories">
+        <div class="container">
+            <h3>Категории</h3>
+            <div class="categorie-grids">
+                <a href="/conditioner">
+                    <div class="col-md-4 cate-grid grid1">
+                        <h4>Кондиционеры</h4>
+                        <p>Создает климан в доме</p>
+                        <p class="store" Перейти в каталог</p>
+                    </div>
+                </a>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <!--bikes-->
+    <div class="bikes">
+        <h3>Популярные товары</h3>
+        <div class="bikes-grids">
+            <ul id="flexiselDemo1">
+                @foreach (var product in Model)
+                {
+                    <li>
+                        <img src="~/Images/product/024d819455d2cdd2b2bad84eeb5c4d94.jpeg" />
+                        <div class="bike-info">
+                            <div class="model">
+                                <h4>@product.Model<span>@product.Price BYN</span></h4>
+                            </div>
+                            <div class="model-info">
+                                <select>
+                                    <option value="volvo">OPTION</option>
+                                    <option value="saab">Option</option>
+                                    <option value="opel">Option</option>
+                                    <option value="audi">Option</option>
+                                </select>
+                                <a href="bicycles.html">BUY</a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="viw">
+                            <a href="bicycles.html">Quick View</a>
+                        </div>
+                    </li>
+                }
+            </ul>
+            <script type="text/javascript">
+                $(window).load(function () {
+                    $("#flexiselDemo1").flexisel({
+                        visibleItems: 3,
+                        animationSpeed: 1000,
+                        autoPlay: true,
+                        autoPlaySpeed: 3000,
+                        pauseOnHover: true,
+                        enableResponsiveBreakpoints: true,
+                        responsiveBreakpoints: {
+                            portrait: {
+                                changePoint: 480,
+                                visibleItems: 1
+                            },
+                            landscape: {
+                                changePoint: 640,
+                                visibleItems: 2
+                            },
+                            tablet: {
+                                changePoint: 768,
+                                visibleItems: 3
+                            }
+                        }
+                    });
+                });
+            </script>
+
+            <script src="~/Scripts/jquery.flexisel.js"></script>
+        </div>
+    </div>
+    <div class="contact">
+        <div class="container">
+            <h3>СВЯЖИТЕСЬ С НАМИ</h3>
+            <p>Пожалуйста, связывайтесь с нами по всем вопросам и вариантам покупки.</p>
+            <form>
+                <input type="text" placeholder="ИМЯ" required="">
+                <input type="text" placeholder="ФАМИЛИЯ" required="">
+                <input class="user" type="text" placeholder="E_MAIL: USER@DOMAIN.COM" required=""><br>
+                <textarea placeholder="СООБЩЕНИЕ"></textarea>
+                <input type="submit" value="ОТПРАВИТЬ">
+            </form>
+        </div>
+    </div>
+    <!---->
+    <div class="footer">
+        <div class="container wrap">
+            <div class="logo2">
+                <a href="index.html"><img src="~/Images/logo2.png" alt="" /></a>
+            </div>
+            <div class="ftr-menu">
+                <ul>
+                    <li><a href="bicycles.html">BICYCLES</a></li>
+                    <li><a href="parts.html">PARTS</a></li>
+                    <li><a href="accessories.html">ACCESSORIES</a></li>
+                    <li><a href="404.html">EXTRAS</a></li>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,10 +1,4 @@
-﻿/*--
-	Author: W3layouts
-	Author URL: http://w3layouts.com
-	License: Creative Commons Attribution 3.0 Unported
-	License URL: http://creativecommons.org/licenses/by/3.0/
---*/
-body {
+﻿body {
     margin: 0;
     padding: 0;
     background: #fff;
@@ -33,7 +27,7 @@ ul {
 }
 /*----*/
 .banner-bg1 {
-    background: url(../images/bgg.jpg) no-repeat;
+    background: url('../Images/bgg.jpg') no-repeat;
     background-size: cover;
     min-height: 835px;
 }

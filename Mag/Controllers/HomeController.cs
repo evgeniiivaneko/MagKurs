@@ -13,46 +13,51 @@ namespace Mag.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            CatalogContext catalogContext = new CatalogContext();
-            var brands = catalogContext.Brand.ToList<Brand>();
-            foreach(var brand in brands)
+            using (CatalogContext catalogContext = new CatalogContext())
             {
-                brand.Image = catalogContext.Image.FirstOrDefault(x => x.PK_ImageId == brand.FK_Image);
-            }
-            catalogContext.Dispose();
-            ChangeImage();
-            
-            return View(brands);
-        }
-
-        public static System.Drawing.Image GetImageFromByteArray(byte[] byteArray)
-        {
-            MemoryStream memoryStream = new MemoryStream(byteArray);
-            return System.Drawing.Image.FromStream(memoryStream);
-        }
-
-        private void ChangeImage()
-        {
-            using(CatalogContext catalogContext = new CatalogContext())
-            {
-                var images = catalogContext.Image.ToList<Image>().OrderBy(x => x.PK_ImageId).ToList();
-                images[0].Picture = @"c:\users\evgen\documents\visual studio 2017\Projects\Mag\Mag\Images\Brand\bosch.png";
-                images[1].Picture = @"c:\users\evgen\documents\visual studio 2017\Projects\Mag\Mag\Images\Brand\Electrolux_2015.png";
-                images[2].Picture = @"c:\users\evgen\documents\visual studio 2017\Projects\Mag\Mag\Images\Brand\Gree_logo.png";
-                images[3].Picture = @"c:\users\evgen\documents\visual studio 2017\Projects\Mag\Mag\Images\Brand\7ecd1ff17f9ac162feb51a84f04224a3.png";
-                images[4].Picture = @"c:\users\evgen\documents\visual studio 2017\Projects\Mag\Mag\Images\Brand\C&H_logo.jpg";
-                images[5].Picture = @"c:\users\evgen\documents\visual studio 2017\Projects\Mag\Mag\Images\Brand\Logo-KITANO.png";
-                images[6].Picture = @"c:\users\evgen\documents\visual studio 2017\Projects\Mag\Mag\Images\Brand\1476097431_30415405_w640_h640_logo4.jpg";
-                images[7].Picture = @"c:\users\evgen\documents\visual studio 2017\Projects\Mag\Mag\Images\Brand\logo-lessar.png";
-                images[8].Picture = @"c:\users\evgen\documents\visual studio 2017\Projects\Mag\Mag\Images\Brand\1494579302_2e28236f2b9ebd93382cf860917e6018.jpeg";
-
-                foreach(var image in images)
+                //ChangeImage(catalogContext);
+                //System.Data.SqlClient.SqlParameter param = new System.Data.SqlClient.SqlParameter();
+                var products = catalogContext.Database.SqlQuery<Product>("SELECT * FROM GetLastProduct()").ToList();
+                foreach (var product in products)
                 {
-                    catalogContext.Entry<Image>(image).State = System.Data.Entity.EntityState.Modified;
+                    product.Brand = catalogContext.Brand.FirstOrDefault(x => x.PK_BrandId == product.FK_Brand);
+                    product.Image = catalogContext.Image.FirstOrDefault(x => x.PK_ImageId == product.FK_Image);
+                    product.Type = catalogContext.Type.FirstOrDefault(x => x.PK_TypeId == product.FK_Type);
                 }
-                catalogContext.SaveChanges();
+                return View(products);
             }
         }
 
+        public ActionResult Catalog()
+        {
+            using (CatalogContext catalogContext = new CatalogContext())
+            {
+                System.Data.SqlClient.SqlParameter page = new System.Data.SqlClient.SqlParameter("@page", 1);
+                System.Data.SqlClient.SqlParameter count = new System.Data.SqlClient.SqlParameter("@count", 10);
+                var products = catalogContext.Database.SqlQuery<Product>("SELECT * FROM GetProductPage(@page,@count)",page,count).ToList();
+                foreach (var product in products)
+                {
+                    product.Brand = catalogContext.Brand.FirstOrDefault(x => x.PK_BrandId == product.FK_Brand);
+                    product.Image = catalogContext.Image.FirstOrDefault(x => x.PK_ImageId == product.FK_Image);
+                    product.Type = catalogContext.Type.FirstOrDefault(x => x.PK_TypeId == product.FK_Type);
+                }
+                return View(products);
+            }
+
+        }
+
+        public ActionResult Create()
+        {
+            using (CatalogContext catalogContext = new CatalogContext())
+            { 
+
+                var brandList = catalogContext.Database.SqlQuery<Brand>("SELECT * FROM GetBrandList()").ToList();
+                ViewBag.BrandNameList = brandList.Select(x => new SelectListItem() {Text = x.Name });
+                var typeList = catalogContext.Database.SqlQuery<Mag.Models.Type>("SELECT * FROM GetTypeList()").ToList();
+                ViewBag.TypeNameList = typeList.Select(x => new SelectListItem() { Text = x.Name });
+
+                return View();
+            }
+        }
     }
 }

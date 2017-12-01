@@ -1,0 +1,19 @@
+﻿@model IEnumerable<Mag.Models.Product>
+
+@{
+    ViewBag.Title = "Catalog";
+}
+
+<h2>Catalog</h2>
+<ul>
+    @foreach (var product in Model)
+    {
+        <li>@product.Brand.Name</li>
+        <li>@product.Model</li>
+        <li>@product.Price</li>
+        <li>@product.Type.Name</li>
+        <li>
+            <img src="~/Images/product/024d819455d2cdd2b2bad84eeb5c4d94.jpeg" />
+        </li>
+    }
+</ul>
